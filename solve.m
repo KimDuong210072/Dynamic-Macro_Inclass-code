@@ -1,20 +1,10 @@
-%% File Info.
-
-%{
-
-    solve.m
-    -------
-    This code solves the model.
-
-%}
-
 %% Solve class.
 
 classdef solve
     methods(Static)
-        %% Solve the model using VFI. 
+        %% Solve the model using backward induction 
         
-        function sol = cs_model_inf(par)            
+        function sol = cs_model_fin(par)            
             %% Structure array for model solution.
             
             sol = struct();
@@ -24,48 +14,47 @@ classdef solve
             beta = par.beta; % Discount factor.
             alen = par.alen; % Grid size for a.
             agrid = par.agrid; % Grid for a (state and choice).
-
-            %% Value Function Iteration.
             
-            v0 = model.utility(par.agrid,par)./(1-beta); % Guess of value function.
-            %v0 = zeros(wlen,1);
-
+            %% Backward Induction
+            
             v1 = zeros(alen,par.T); % Container for V.
             a1 = zeros(alen,par.T); % Container for a'.
-                            
-            crit = 1e-6;
-            maxiter = 10000;
-            diff = 1;
-            iter = 0;
             
-            fprintf('------------Beginning Value Function Iteration.------------\n\n')
+            fprintf('------------Beginning Backward Induction.------------\n\n')
             
-       
-                
-                for t = par.T:1
-                    for i = 1:alen % Loop over the state space and maximize.
-                        c = (-(agrid)/(1+r)) + agrid(i) + par.y_bar ; % Consumption for a given state of a, agrid(i), and the vector of choices for a', agrid.
-                        vall = model.utility(c,par) + beta*v0; % Compute the Bellman equation for each choice of a', given a particular state of a.
-                        [vmax,ind] = max(vall); 
-                        v1(i,t) = vmax;
-                        a1(i,t) = agrid(ind);
+            % Last period: consume everything
+            v1(:,par.T) = model.utility(agrid,par); 
+            a1(:,par.T) = 0; 
+            
+            % Solve backwards in time
+            for t = par.T-1:-1:1
+                for i = 1:alen % Loop over state space
+                    
+                    % Determine income based on working/retirement status
+                    if t < par.t_retire
+                        income = par.y_t; % Working income
+                    else
+                        income = par.pension_t; % Pension
                     end
+                    
+                    % Consumption equation: c_t = income + a_t - a_{t+1}/(1+r)
+                    c = max(income + agrid(i) - agrid./(1 + par.r), 0);
+                    
+                    % Bellman equation
+                    vall = model.utility(c,par) + beta * v1(:,t+1); 
+                    [vmax,ind] = max(vall); 
+                    v1(i,t) = vmax;
+                    a1(i,t) = agrid(ind);
                 end
-                
-                
-
             end
-                
-            
-            fprintf('------------End of Value Function Iteration.------------\n')
+
+            fprintf('------------End of Backward Induction.------------\n')
             
             %% Value and policy functions.
             
-            sol.c = max(agrid-a1,0); % Consumption policy function.
-            sol.a = a1; % Cake size policy function.
+            sol.c = max(agrid - a1, 0); % Consumption policy function.
+            sol.a = a1; % Asset policy function.
             sol.v = v1; % Value function.
-            
         end
-        
     end
 end
