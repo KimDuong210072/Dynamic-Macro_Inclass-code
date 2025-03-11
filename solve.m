@@ -31,10 +31,10 @@ classdef solve
                 for i = 1:alen % Loop over state space
                     
                     % Determine income based on working/retirement status
-                    if t < par.t_retire
-                        income = par.y_t; % Working income
+                    if t < par.t_r
+                        income = par.y_bar; % Working income
                     else
-                        income = par.pension_t; % Pension
+                        income = par.y_bar * par.y_bar; % Pension
                     end
                     
                     % Consumption equation: c_t = income + a_t - a_{t+1}/(1+r)

@@ -19,20 +19,20 @@ classdef my_graph
             
             figure(1)
             
-            plot(par.wgrid,sol.w)
-                xlabel({'$W_{t}$'},'Interpreter','latex')
-                ylabel({'$W_{t+1}$'},'Interpreter','latex') 
-            title('Cake Size Policy Function')
+            plot(par.agrid,sol.a)
+                xlabel({'$a_{t}$'},'Interpreter','latex')
+                ylabel({'$a_{t+1}$'},'Interpreter','latex') 
+            title('Asset Policy Function')
             
-            fig1name = strcat(figout,'wpol.fig');
+            fig1name = strcat(figout,'apol.fig');
             savefig(fig1name)
             
             %% Plot consumption policy function.
             
             figure(2)
             
-            plot(par.wgrid,sol.c)
-                xlabel({'$W_{t}$'},'Interpreter','latex')
+            plot(par.agrid,sol.c)
+                xlabel({'$a_{t}$'},'Interpreter','latex')
                 ylabel({'$C_{t}$'},'Interpreter','latex') 
             title('Consumption Policy Function')
             
@@ -43,9 +43,9 @@ classdef my_graph
             
             figure(3)
             
-            plot(par.wgrid,sol.v)
-                xlabel({'$W_{t}$'},'Interpreter','latex')
-                ylabel({'$V_t(W_t)$'},'Interpreter','latex') 
+            plot(par.agrid,sol.v)
+                xlabel({'$a_{t}$'},'Interpreter','latex')
+                ylabel({'$U_t(a_t)$'},'Interpreter','latex') 
             title('Value Function')
 
             fig3name = strcat(figout,'vfun.fig');
@@ -65,16 +65,16 @@ classdef my_graph
             fig4name = strcat(figout,'csim.fig');
             savefig(fig4name)
             
-            %% Plot simulated cake size.
+            %% Plot simulated asset.
             
             figure(5)
             
-            plot(tgrid,sim.wsim)
+            plot(tgrid,sim.asim)
                 xlabel({'Time'},'Interpreter','latex')
-                ylabel({'$W^{sim}_t$'},'Interpreter','latex') 
-            title('Simulated Cake Size')
+                ylabel({'$a^{sim}_t$'},'Interpreter','latex') 
+            title('Simulated Asset')
 
-            fig5name = strcat(figout,'wsim.fig');
+            fig5name = strcat(figout,'asim.fig');
             savefig(fig5name)
             
             %% Plot simulated utility.

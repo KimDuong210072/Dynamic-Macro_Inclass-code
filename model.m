@@ -25,7 +25,8 @@ classdef model
             par.sigma = 1.00; % CRRA.
             par.y_bar = 0.5; %set y_bar
             par.k = 0.3;
-            
+            par.r = 0.25;
+
             assert(par.beta > 0 && par.beta < 1.00,'Discount factor should be between 0 and 1.\n')
             assert(par.sigma >= 1,'CRRA should be at least 1.\n')
             assert(par.y_bar > 0,'labor income should be larger than 0\n')
