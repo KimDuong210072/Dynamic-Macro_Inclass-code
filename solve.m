@@ -17,13 +17,13 @@ classdef solve
             
             %% Backward Induction
             
-            v1 = zeros(alen,par.T); % Container for V.
+            u1 = zeros(alen,par.T); % Container for u.
             a1 = zeros(alen,par.T); % Container for a'.
             
             fprintf('------------Beginning Backward Induction.------------\n\n')
             
             % Last period: consume everything
-            v1(:,par.T) = model.utility(agrid,par); 
+            u1(:,par.T) = model.utility(agrid,par); 
             a1(:,par.T) = 0; 
             
             % Solve backwards in time
@@ -34,16 +34,16 @@ classdef solve
                     if t < par.t_r
                         income = par.y_bar; % Working income
                     else
-                        income = par.y_bar * par.y_bar; % Pension
+                        income = par.k * par.y_bar; % Pension
                     end
                     
                     % Consumption equation: c_t = income + a_t - a_{t+1}/(1+r)
                     c = max(income + agrid(i) - agrid./(1 + par.r), 0);
                     
                     % Bellman equation
-                    vall = model.utility(c,par) + beta * v1(:,t+1); 
-                    [vmax,ind] = max(vall); 
-                    v1(i,t) = vmax;
+                    uall = model.utility(c,par) + beta * u1(:,t+1); 
+                    [umax,ind] = max(uall); 
+                    u1(i,t) = umax;
                     a1(i,t) = agrid(ind);
                 end
             end
@@ -54,7 +54,7 @@ classdef solve
             
             sol.c = max(agrid - a1, 0); % Consumption policy function.
             sol.a = a1; % Asset policy function.
-            sol.v = v1; % Value function.
+            sol.u = u1; % Value function.
         end
     end
 end

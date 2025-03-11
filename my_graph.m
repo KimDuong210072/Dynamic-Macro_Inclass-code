@@ -15,7 +15,7 @@ classdef my_graph
         %% Plot value and policy functions.
         
         function [] = plot_policy(par,sol,sim,figout)
-            %% Plot cake size policy function.
+            %% Plot asset policy function.
             
             figure(1)
             
@@ -43,12 +43,12 @@ classdef my_graph
             
             figure(3)
             
-            plot(par.agrid,sol.v)
+            plot(par.agrid,sol.u)
                 xlabel({'$a_{t}$'},'Interpreter','latex')
                 ylabel({'$U_t(a_t)$'},'Interpreter','latex') 
             title('Value Function')
 
-            fig3name = strcat(figout,'vfun.fig');
+            fig3name = strcat(figout,'ufun.fig');
             savefig(fig3name)
             
             %% Plot simulated consumption.
