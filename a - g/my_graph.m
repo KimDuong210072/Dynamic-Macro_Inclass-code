@@ -16,10 +16,12 @@ classdef my_graph
         
         function [] = plot_policy(par,sol,sim,figout)
             %% Plot asset policy function.
+
+            time = linspace(1,par.T,par.T);
             
             figure(1)
             
-            plot(par.agrid,sol.a)
+            plot(time,sol.a)
                 xlabel({'$a_{t}$'},'Interpreter','latex')
                 ylabel({'$a_{t+1}$'},'Interpreter','latex') 
             title('Asset Policy Function')
@@ -31,7 +33,7 @@ classdef my_graph
             
             figure(2)
             
-            plot(par.agrid,sol.c)
+            plot(time,sol.c)
                 xlabel({'$a_{t}$'},'Interpreter','latex')
                 ylabel({'$C_{t}$'},'Interpreter','latex') 
             title('Consumption Policy Function')
@@ -43,7 +45,7 @@ classdef my_graph
             
             figure(3)
             
-            plot(par.agrid,sol.u)
+            plot(time,sol.u)
                 xlabel({'$a_{t}$'},'Interpreter','latex')
                 ylabel({'$U_t(a_t)$'},'Interpreter','latex') 
             title('Value Function')

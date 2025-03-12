@@ -24,7 +24,7 @@ classdef simulate
 
             T = par.T; % Time periods.
             csim = zeros(par.T,1); % Container for simulated consumption.
-            asim = zeros(par.T,1); % Container for simulated asset.
+            asim = zeros(par.T,1); % Container for simulated asset.
             usim = zeros(par.T,1); % Container for simulated value function.
             
             %% Begin simulation.

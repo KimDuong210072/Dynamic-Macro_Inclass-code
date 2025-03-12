@@ -26,12 +26,15 @@ classdef model
             par.y_bar = 3.50; %set y_bar
             par.k = 0.3;
             par.r = 0.15;
+            par.p = 0.2;
 
             assert(par.beta > 0 && par.beta < 1.00,'Discount factor should be between 0 and 1.\n')
             assert(par.sigma >= 1,'CRRA should be at least 1.\n')
             assert(par.y_bar > 0,'labor income should be larger than 0\n')
             assert(par.k > 0 && par.k < 1.00,'Pension fraction should be between 0 and 1.\n')
-            
+            assert(par.p < 1, '|p| should be smaller than 1\n')
+
+           
 
             %% Simulation parameters.
 
