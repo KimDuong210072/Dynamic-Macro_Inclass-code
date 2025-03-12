@@ -40,8 +40,8 @@ classdef hj_model
              %% Simulation parameters.
 
             par.seed = 2025; % Seed for simulation.
-            par.T = 60; % Number of time periods.
-            par.t_r = 41; %Number of retirement. 
+            par.T = 4; % Number of time periods.
+            par.t_r = 2; %Number of retirement. 
 
         end
         
@@ -65,8 +65,8 @@ classdef hj_model
             assert(par.m > 0,'Scaling parameter for Tauchen should be positive.\n')
             assert(par.ylen > 3,'Grid size for y should be positive and greater than 3.\n')
 
-            [ygrid,pmat] = model.tauchen(par.mu,par.rho,par.sigma_eps,par.Alen,par.m); % Tauchen's Method to discretize the AR(1) process for log productivity.
-            par.ygrid = exp(ygrid); % The AR(1) is in logs so exponentiate it to get A.
+            [ygrid,pmat] = hj_model.tauchen(par.mu,par.rho,par.sigma_eps,par.ylen,par.m); % Tauchen's Method to discretize the AR(1) process for log productivity.
+            par.ygrid = exp(ygrid); % The AR(1) is in logs so exponentiate it to get y.
             par.pmat = pmat; % Transition matrix.
 
         end

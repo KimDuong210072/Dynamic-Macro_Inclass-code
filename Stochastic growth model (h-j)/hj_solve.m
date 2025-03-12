@@ -4,7 +4,7 @@ classdef hj_solve
     methods(Static)
         %% Solve the model using backward induction 
         
-        function sol = cs_model_fin(par)            
+        function sol = cs_hj_model_fin(par)            
             %% Structure array for model solution.
             
             sol = struct();
@@ -15,7 +15,6 @@ classdef hj_solve
             alen = par.alen; % Grid size for a.
             agrid = par.agrid; % Grid for a (state and choice).
 
-            ylen = par.ylen; % Grid size for y.
             ygrid = par.ygrid; % Grid for y.
             pmat = par.pmat; %Grid for y
             
@@ -25,7 +24,7 @@ classdef hj_solve
             
             fprintf('------------Beginning Backward Induction.------------\n\n')
             % Last period: consume everything
-            u1(:,par.T) = model.utility(agrid,par); 
+            u1(:,par.T) = hj_model.utility(agrid,par); 
             a1(:,par.T) = 0; 
            
             % Solve backwards in time
@@ -46,7 +45,7 @@ classdef hj_solve
                     
                     % Bellman equation
                     eu = u1*pmat(j,:)';
-                    uall = model.utility(c,par) + beta * eu;
+                    uall = hj_model.utility(c,par) + beta * eu;
                     [umax,ind] = max(uall); 
                     u1(i,t) = umax;
                     a1(i,t) = agrid(ind);
