@@ -40,8 +40,8 @@ classdef hj_model
              %% Simulation parameters.
 
             par.seed = 2025; % Seed for simulation.
-            par.T = 4; % Number of time periods.
-            par.t_r = 3; %Number of retirement. 
+            par.T = 60; % Number of time periods.
+            par.t_r = 41; %Number of retirement. 
 
         end
         
