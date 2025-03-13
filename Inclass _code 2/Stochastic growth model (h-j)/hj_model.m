@@ -29,7 +29,6 @@ classdef hj_model
             par.sigma_eps = 0.07; % Std. dev of productivity shocks.
             par.rho = 0.85; % Persistence of AR(1) process.
             par.mu = 0.0; % Intercept of AR(1) process.
-
   
             assert(par.beta > 0 && par.beta < 1.00,'Discount factor should be between 0 and 1.\n')
             assert(par.sigma >= 1,'CRRA should be at least 1.\n')
@@ -37,11 +36,13 @@ classdef hj_model
             assert(par.k > 0 && par.k < 1.00,'Pension fraction should be between 0 and 1.\n')
             assert(par.sigma_eps > 0,'The standard deviation of the shock must be positive.\n')
             assert(abs(par.rho) < 1,'The persistence must be less than 1 in absolute value so that the series is stationary.\n')
+
              %% Simulation parameters.
 
             par.seed = 2025; % Seed for simulation.
             par.T = 60; % Number of time periods.
-            par.t_r = 41; %Number of retirement. 
+            par.t_r = 41; %Number of retirements.
+            par.NN = 100;
 
         end
         
@@ -56,7 +57,7 @@ classdef hj_model
             
             assert(par.alen > 5,'Grid size for a should be positive and greater than 5.\n')
             assert(par.amax > par.amin,'Minimum a should be less than maximum value.\n')
-            
+
             par.agrid = linspace(par.amin,par.amax,par.alen)'; % Equally spaced, linear grid for a (and a').
                        
             %% Discretized productivity process.

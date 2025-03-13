@@ -17,20 +17,21 @@ classdef hj_simulate
         function sim = grow(par,sol)            
             %% Set up.
             
-            kgrid = par.kgrid; % Capital today (state variable).
-            Agrid = par.Agrid; % Productivity (state variable).
+            agrid = par.agrid; 
 
-            yout = sol.y; % Production function.
-            kpol = sol.k; % Policy function for capital.
+            aout = sol.a; % Production function.
             cpol = sol.c; % Policy function for consumption.
-            ipol = sol.i; % Policy function for investment.
 
             T = par.T; % Time periods.
-            Asim = zeros(par.T*2,1); % Container for simulated productivity.
-            ysim = zeros(par.T*2,1); % Container for simulated output.
-            ksim = zeros(par.T*2,1); % Container for simulated capital stock.
-            csim = zeros(par.T*2,1); % Container for simulated consumption.
-            isim = zeros(par.T*2,1); % Container for simulated investment.
+            N = par.NN; % People
+            TT = time;
+            tr= par.t_r;
+
+            
+
+            ysim = zeros(par.T*2,1); % Container for simulated capital stock.
+            asim = zeros(par.T*2,1); % Container for simulated consumption.
+            tsim = zeros(par.T*2,1); % Container for simulated investment.
             usim = zeros(par.T*2,1); % Container for simulated utility.
             
             %% Begin simulation.
@@ -44,7 +45,7 @@ classdef hj_simulate
             k0_ind = randsample(par.klen,1); % Index for initial capital stock.
             A0_ind = randsample(par.Alen,1,true,pmat0); % Index for initial productivity.
 
-            Asim(1) = Agrid(A0_ind); % Productivity in period 1.
+            asim(1) = Agrid(A0_ind); % Productivity in period 1.
             ysim(1) = yout(k0_ind,A0_ind); % Output in period 1 given k0 and A0.
             csim(1) = cpol(k0_ind,A0_ind); % Consumption in period 1 given k0 and A0.
             ksim(1) = kpol(k0_ind,A0_ind); % Capital choice for period 2 given k0 and A0.

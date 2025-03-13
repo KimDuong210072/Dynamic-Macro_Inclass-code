@@ -21,7 +21,7 @@ classdef hj_my_graph
             
             figure(1)
             
-            plot(time,sol.a)
+            plot(sol.a, time)
                 xlabel({'$a_{t}$'},'Interpreter','latex')
                 ylabel({'$a_{t+1}$'},'Interpreter','latex') 
             title('Asset Policy Function')
@@ -33,8 +33,8 @@ classdef hj_my_graph
             
             figure(2)
             
-            plot(time,sol.c)
-                xlabel({'$a_{t}$'},'Interpreter','latex')
+            plot(sol.c,time)
+                xlabel({'$T$'},'Interpreter','latex')
                 ylabel({'$C_{t}$'},'Interpreter','latex') 
             title('Consumption Policy Function')
             
@@ -45,7 +45,7 @@ classdef hj_my_graph
             
             figure(3)
             
-            plot(time,sol.u)
+            plot(sol.u, time)
                 xlabel({'$a_{t}$'},'Interpreter','latex')
                 ylabel({'$U_t(a_t)$'},'Interpreter','latex') 
             title('Value Function')
