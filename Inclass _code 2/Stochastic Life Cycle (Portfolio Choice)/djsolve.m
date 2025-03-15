@@ -132,7 +132,7 @@ classdef djsolve
             sol.c = c1; % Consumption policy function.
             sol.a = a1; % Saving policy function.
             sol.v = v1; % Value function.
-            
+            sol.alpha = alpha1;
         end
         
     end

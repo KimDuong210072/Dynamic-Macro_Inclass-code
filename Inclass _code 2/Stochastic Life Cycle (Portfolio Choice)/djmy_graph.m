@@ -18,7 +18,7 @@ classdef djmy_graph
             %% Plot consumption policy function.
 
             ystate = par.ygrid;
-            age = linspace(1,par.T,par.T,par.T);
+            age = linspace(1,par.T,par.T);
             alpha_slice = 1; 
 
             figure(1)
