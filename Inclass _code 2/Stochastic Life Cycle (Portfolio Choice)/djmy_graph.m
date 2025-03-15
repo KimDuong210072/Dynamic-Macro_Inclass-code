@@ -10,7 +10,7 @@
 
 %% Graph class.
 
-classdef amy_graph
+classdef djmy_graph
     methods(Static)
         %% Plot value and policy functions.
         

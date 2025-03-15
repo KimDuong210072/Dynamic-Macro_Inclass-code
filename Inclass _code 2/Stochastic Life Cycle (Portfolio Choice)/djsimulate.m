@@ -10,7 +10,7 @@
 
 %% Simulate class.
 
-classdef asimulate
+classdef djsimulate
     methods(Static)
         %% Simulate the model. 
         
@@ -71,7 +71,7 @@ classdef asimulate
 
             end
 
-            usim(1,:) = amodel.utility(csim(1,:),par); % Utility in period 0 given a0.
+            usim(1,:) = djmodel.utility(csim(1,:),par); % Utility in period 0 given a0.
 
             %% Simulate endogenous variables.
 
@@ -92,7 +92,7 @@ classdef asimulate
                         at_ind = find(asim(j-1,i)==agrid); % Savings choice in the previous period is the state today. Find where the latter is on the grid.
                         csim(j,i) = cpol(at_ind,age,y0_ind(i)); % Consumption in period t.
                         asim(j,i) = apol(at_ind,age,y0_ind(i)); % Savings for period t+1.
-                        usim(j,i) = amodel.utility(csim(j,i),par); % Utility in period t.
+                        usim(j,i) = djmodel.utility(csim(j,i),par); % Utility in period t.
 
                         if age == tr-1 % Retire next period
                             yr(i) = ygrid(y0_ind(i)); % Store as pension for next period

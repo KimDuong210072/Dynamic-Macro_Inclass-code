@@ -75,7 +75,7 @@ classdef djsolve
                             for al = 1:alphalen % Loop over the alpha choices.
                                 
                                 alpha_t = alphagrid(al);
-                                R_t = alpha_t*(1+rbar) + (1-alpha_t)*(1+r_t);
+                                R_t = alpha_t
 
                             % Consumption
                             ct = agrid(p)+yt-(agrid./(1+r)); % Possible values for consumption, c = a + y - (a'/(1+r)), given a and y.

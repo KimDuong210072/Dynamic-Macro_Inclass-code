@@ -34,7 +34,6 @@ classdef djmodel
             %% Prices and Income.
 
             par.rbar = 0.03; % Safe asset fixed interest rate.
-            par.nu_values = [0.5 * par.rbar, -0.5 * par.rbar]; % Stochastic component
             par.kappa = 0.6; % Share of income as pension.
 
             par.sigma_eps = 0.07; % Std. dev of productivity shocks.
@@ -44,17 +43,6 @@ classdef djmodel
             assert(par.kappa >= 0.0 && par.kappa <= 1.0,'The share of income received as pension should be from 0 to 1.\n')
             assert(par.sigma_eps > 0,'The standard deviation of the shock must be positive.\n')
             assert(abs(par.rho) < 1,'The persistence must be less than 1 in absolute value so that the series is stationary.\n')
-            %% Interest Rate.
-
-            par.rbar = 0.03; % Safe asset fixed interest rate.
-            par.vt_values = [0.5 * par.rbar, -0.5 * par.rbar]; % Stochastic component
-
-            % Generate random ν_t values for each time period
-            rng(par.seed);
-            par.v_t = par.vt_values(randi([1,2], par.T, par.NN)); % Assign ν_t values randomly
-
-            % Compute risky interest rate r_t
-            par.r_t = 0.01 + par.rbar + par.v_t;
 
             %% Simulation parameters.
 
@@ -92,7 +80,7 @@ classdef djmodel
         
             %% Alpha grid.
 
-            par.alphalen = 101; % Grid size for alpha.
+            par.alphalen = 101; % Grid size for a.
             par.alphamax = 1.0; % Upper bound for alpha.
             par.alphamin = 0.0; % Minimum alpha.
           
