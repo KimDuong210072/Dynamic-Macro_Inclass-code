@@ -74,7 +74,7 @@ classdef asolve
                             % Solve the maximization problem.
                             ev = squeeze(v1(:,T-age+2,:))*pmat(i,:)';
                             vall = amodel.utility(ct,par) + beta*ev; % Compute the value function for each choice of a', given a.
-                            vall(agrid+1<=0.0) = -inf; % Set the value function to negative infinity when at < 0. (idk what I am doing)
+                            vall(agrid+1<0.0) = -inf; % Set the value function to negative infinity when at < 0.
                             vall(ct<=0.0) = -inf; % Set the value function to negative infinity when c <= 0.
                             [vmax,ind] = max(vall); % Maximize: vmax is the maximized value function; ind is where it is in the grid.
                             
