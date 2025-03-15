@@ -2,7 +2,7 @@
 
 %{
 
-    solve.m
+    djsolve.m
     -------
     This code solves the model.
 
@@ -34,7 +34,6 @@ classdef djsolve
             pmat = par.pmat; % Transition matrix for y.
 
             rbar = par.rbar; % Safe asset fixed interest rate.
-            r_t = par.rt; %Risky interest rate r_t
             kappa = par.kappa; % Share of income as pension.
 
             alphalen = par.alphalen; % Grid size for alpha.
@@ -48,8 +47,10 @@ classdef djsolve
             alpha1 = nan(alen,T,ylen,alphalen); % Container for alpha'.
 
 
-            amat = repmat(agrid,1,ylen);
-            ymat = repmat(ygrid,alen,1);
+            % amat will have dimensions: (alen x 1 x ylen x alphalen)
+            amat = repmat(reshape(agrid, [alen, 1, 1, 1]), [1, 1, ylen, alphalen]);
+            % ymat will have dimensions: (alen x 1 x ylen x alphalen) where each row is ygrid.
+            ymat = repmat(reshape(ygrid, [1, 1, ylen, 1]), [alen, 1, 1, alphalen]);
             
             fprintf('------------Solving from the Last Period of Life.------------\n\n')
             
@@ -57,9 +58,10 @@ classdef djsolve
                 
                 if T-age+1 == T % Last period of life.
 
-                    c1(:,T,:) = amat + kappa*ymat; % Consume everything.
-                    a1(:,T,:) = 0.0; % Save nothing.
-                    v1(:,T,:) = djmodel.utility(c1(:,T,:),par); % Terminal value function.
+                    c1(:,T,:,:) = amat + kappa*ymat; % Consume everything.
+                    a1(:,T,:,:) = 0.0; % Save nothing.
+                    v1(:,T,:,:) = djmodel.utility(c1(:,T,:,:),par); % Terminal value function.
+                    alpha1(:,T,:,:) = 0.0; %Invest nothing. 
 
                 else % All other periods.
     
@@ -70,30 +72,47 @@ classdef djsolve
                         else
                             yt = ygrid(i);
                         end
-        
-                        for p = 1:alen % Loop over the a-states.
-                            for al = 1:alphalen % Loop over the alpha choices.
-                                
+                        for al = 1:alphalen % Loop over the alpha choices.
                                 alpha_t = alphagrid(al);
-                                R_t = alpha_t*(1+rbar) + (1-alpha_t)*(1+r_t);
+        
+                            for p = 1:alen % Loop over the a-states.
+                                R_t  = alpha_t*(1 + rbar) + (1 - alpha_t)*(1 + par.r_t);
 
+                                if p < alen
+                                    next = agrid(p+1);
+                                else
+                                    next = agrid(p); % When at the upper bound, no higher asset is available.
+                                end
                             % Consumption
-                            ct = agrid(p)+yt-(agrid./(1+r)); % Possible values for consumption, c = a + y - (a'/(1+r)), given a and y.
+                            ct = agrid(p) + yt - (next ./ R_t); % Possible values for consumption, c = a + y - (a'/(1+r)), given a and y.
                             ct(ct<0.0) = 0.0;
+
                             
+                            % Initialize the next-period expected value.
+                                EV_next = 0.0;
+                                
+                                % Loop over next-period income states.
+                                for yNext = 1:ylen
+                                    probY = pmat(i, yNext);  % Correctly index pmat by the current income state.
+                                    % For each next income state, take the best next-period value over alpha:
+                                    [vmaxNext, ~] = max(squeeze(v1(p,T-age+2, yNext, :)));
+                                    EV_next = EV_next + probY * vmaxNext;
+                                end
+
                             % Solve the maximization problem.
-                            ev = squeeze(v1(:,T-age+2,:))*pmat(i,:)';
-                            vall = djmodel.utility(ct,par) + beta*ev; % Compute the value function for each choice of a', given a.
+                            vall = djmodel.utility(ct, par) + beta * EV_next; % Compute the value function for each choice of a', given a.
                             vall(agrid+1<0.0) = -inf; % Set the value function to negative infinity when at < 0.
                             vall(ct<=0.0) = -inf; % Set the value function to negative infinity when c <= 0.
-                            [vmax,ind] = max(vall); % Maximize: vmax is the maximized value function; ind is where it is in the grid.
+                            [vmax, ind] = max(vall(:)); % Maximize: vmax is the maximized value function; ind is where it is in the grid.
                             
                             % Store values.
-                            v1(p,T-age+1,i) = vmax; % Maximized v.
-                            c1(p,T-age+1,i) = ct(ind); % Optimal c'.
-                            a1(p,T-age+1,i) = agrid(ind); % Optimal a'.
-       
-                        end
+                            v1(p,T-age+1,i,al) = vmax; % Maximized v.
+                            c1(p,T-age+1,i,al) = ct(ind); % Optimal c'.
+                            a1(p,T-age+1,i,al) = agrid(ind); % Optimal a'.
+                            alpha1(p,T-age+1,i,al) = alphagrid(ind); % Optimal alpha'.
+
+                            end
+                        end 
 
                     end
                     

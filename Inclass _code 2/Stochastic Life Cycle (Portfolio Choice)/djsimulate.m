@@ -21,6 +21,7 @@ classdef djsimulate
 
             apol = sol.a; % Policy function for capital.
             cpol = sol.c; % Policy function for consumption.
+            alphapol = sol.alpha; %Policy function for portfolio share. 
 
             TT = par.TT; % Time periods.
             NN = par.NN; % People.
@@ -61,6 +62,7 @@ classdef djsimulate
                 tsim(1,i) = t0_ind(i); % Age in period 0.
                 csim(1,i) = cpol(a0_ind(i),t0_ind(i),y0_ind(i)); % Consumption in period 0 given a0.
                 asim(1,i) = apol(a0_ind(i),t0_ind(i),y0_ind(i)); % Savings for period 1 given a0.
+                asim_alpha(1,i) = alphapol(a0_ind(i),t0_ind(i),y0_ind(i),1); % Portfolio for period 1.
 
                 if t0_ind(i) == tr-1 % Retired next period.
                     yr(i) = ygrid(y0_ind(i)); % Store as pension for next period
@@ -90,8 +92,9 @@ classdef djsimulate
 
                         tsim(j,i) = age; % Age in period t.
                         at_ind = find(asim(j-1,i)==agrid); % Savings choice in the previous period is the state today. Find where the latter is on the grid.
-                        csim(j,i) = cpol(at_ind,age,y0_ind(i)); % Consumption in period t.
-                        asim(j,i) = apol(at_ind,age,y0_ind(i)); % Savings for period t+1.
+                        csim(j,i) = cpol(at_ind,age,y0_ind(i), 1); % Consumption in period t.
+                        asim(j,i) = apol(at_ind,age,y0_ind(i), 1); % Savings for period t+1.
+                        asim_alpha(1,i) = alphapol(at_ind,age,y0_ind(i),1); % Portfolio for period 1.
                         usim(j,i) = djmodel.utility(csim(j,i),par); % Utility in period t.
 
                         if age == tr-1 % Retire next period
@@ -112,7 +115,8 @@ classdef djsimulate
             sim.tsim = tsim; % Simulated age.
             sim.csim = csim; % Simulated consumption.
             sim.usim = usim; % Simulated utility.
-             
+            sim.alphasim = asim_alpha; % Simulated share.
+
         end
         
     end

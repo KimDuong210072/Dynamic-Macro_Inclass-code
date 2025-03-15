@@ -44,6 +44,13 @@ classdef djmodel
             assert(par.kappa >= 0.0 && par.kappa <= 1.0,'The share of income received as pension should be from 0 to 1.\n')
             assert(par.sigma_eps > 0,'The standard deviation of the shock must be positive.\n')
             assert(abs(par.rho) < 1,'The persistence must be less than 1 in absolute value so that the series is stationary.\n')
+           
+            %% Simulation parameters.
+
+            par.seed = 2025; % Seed for simulation.
+            par.TT = 61; % Number of time periods.
+            par.NN = 1000; % Number of people.
+
             %% Interest Rate.
 
             par.rbar = 0.03; % Safe asset fixed interest rate.
@@ -55,13 +62,6 @@ classdef djmodel
 
             % Compute risky interest rate r_t
             par.r_t = 0.01 + par.rbar + par.v_t;
-
-            %% Simulation parameters.
-
-            par.seed = 2025; % Seed for simulation.
-            par.TT = 61; % Number of time periods.
-            par.NN = 10000; % Number of people.
-
         end
         
         %% Generate state grids.
